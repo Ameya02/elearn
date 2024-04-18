@@ -48,7 +48,18 @@ const getCourse = async (req, res) => {
 
 const getAllCourses = async (req, res) => {
     try {
-        const courseData = await Course.findAll();
+        const { category, level, popularity, limit, page } = req.query;
+        const offset = (page - 1) * limit;
+        const courseData = await Course.findAll({
+            where: {
+                category: category,
+                level: level,
+                popularity: popularity,
+               
+            },
+            limit: parseInt(limit),
+            offset: parseInt(offset)
+            });
         res.status(200).json(courseData);
     } catch (error) {
         res.status(400).json(error);
